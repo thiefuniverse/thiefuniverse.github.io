@@ -1,0 +1,25 @@
+﻿{
+  "name": "thiefuniverse",
+  "contact": {
+    "name": "FlyThief's blog",
+    "github": {
+      "text": "thiefuniverse @ GitHub",
+      "link": "https://github.com/thiefuniverse",
+      "img": "/static/github.svg"
+    },
+    "email": {
+      "text": "thiefuniverses@gmail.com",
+      "link": "mailto:thiefuniverses@gmail.com",
+      "img": "/static/email.svg"
+    }
+  },
+  "pages": {
+    "🏠": "/",
+    "📝": "/articles/",
+    "🔆": "/theme/"
+  },
+  "footer": [
+    "<a href='https://github.com/thiefuniverse/thiefuniverse.github.io'>About blog</a>",
+    "&copy; thiefuniverse, 2024"
+  ]
+}

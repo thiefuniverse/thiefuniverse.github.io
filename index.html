@@ -1,0 +1,55 @@
+﻿<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width">
+  <title>Loading...</title>
+  <link rel="stylesheet" href="/stylesheets/github-markdown.css">
+  <link rel="stylesheet" href="/stylesheets/bot-frame.css">
+  <style>
+    .markdown-body {
+      padding: 20px 0;
+    }
+
+      .markdown-body blockquote {
+        border-left: none;
+      }
+
+      .markdown-body a:hover,
+      .markdown-body a:active {
+        text-shadow: 0 0 15px orange;
+        text-decoration: none;
+      }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <header>
+      <nav class="navSec"></nav>
+      <div class="contactSec"></div>
+    </header>
+    <section class="markdown-body"></section>
+    <footer class="footerSec"></footer>
+  </div>
+  <script src="/javascripts/marked.js"></script>
+  <script src="/javascripts/bot-mark.js"></script>
+  <script src="/javascripts/bot-frame.js"></script>
+  <script>
+    loadLayout('/static/home.md', function (md, title) {
+      var mdSec = document.getElementsByClassName('markdown-body')[0];
+
+      var renderer = new MarkdownRenderer();
+      mdSec.innerHTML = renderer.render(md);
+
+      title('Home');
+
+      var scripts = mdSec.getElementsByTagName('script');
+      for (var i = 0; i < scripts.length; i++) {
+        eval(scripts[i].innerHTML);
+        //console.log('eval', scripts[i].innerHTML);
+      }
+    });
+  </script>
+</body>
+</html>
