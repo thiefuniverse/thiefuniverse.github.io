@@ -51,7 +51,7 @@ FileLoader.prototype.loadFile = function (filename, promptState, done) {
 function ConfigLoader() { }
 
 ConfigLoader.prototype.nav = function (config) {
-    var navHtml = '<h2>' + '~/ ';
+    var navHtml = '<h2>';
     for (var page in config.pages) {
         navHtml += '<a href="' + config.pages[page] + '">' + page + '</a>' + ' | ';
     }
