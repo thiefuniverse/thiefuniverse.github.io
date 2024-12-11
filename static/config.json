@@ -15,9 +15,7 @@
   },
   "pages": {
     "🏠": "/",
-    "📝": "/articles/",
-    "🧑": "/about/",
-    "🔆": "/theme/"
+    "📝": "/articles/"
   },
   "footer": [
     "<a href='https://github.com/thiefuniverse/thiefuniverse.github.io'>About blog</a>",

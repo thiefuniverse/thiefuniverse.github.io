@@ -2,7 +2,7 @@
 /* Basic Settings */
 
 body {
-    font-family: "jinkaiFont","Segoe UI", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-family: "jinkai","Segoe UI", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-size: 16px;
     color: #333;
 }
@@ -55,7 +55,7 @@ body {
 }
 
 .wrapper {
-    width: 860px;
+    width: 1300px;
     margin: 0 auto;
 }
 
@@ -74,7 +74,7 @@ header {
     }
 
 footer {
-    font-size: 11px;
+    font-size: 16px;
     width: 230px;
     float: left;
     position: fixed;
@@ -86,7 +86,7 @@ footer {
     }
 
 section {
-    width: 540px;
+    width: 900px;
     float: right;
 }
 
