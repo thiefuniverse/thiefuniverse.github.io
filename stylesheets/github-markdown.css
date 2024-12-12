@@ -138,6 +138,9 @@
   .markdown-body {
     font-size: 18px;
   }
+  .markdown-body img {
+    max-width:100%;
+  }
 }
 
 @font-face {
