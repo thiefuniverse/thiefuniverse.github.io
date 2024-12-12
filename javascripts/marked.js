@@ -964,11 +964,11 @@ Renderer.prototype.link = function(href, title, text) {
 };
 
 Renderer.prototype.image = function(href, title, text) {
-  var out = '<img src="' + href + '" alt="' + text + '"';
+  var out = '<div class="md_img" style="margin:0 auto;text-align:center;"><img src="' + href + '" alt="' + text + '"';
   if (title) {
     out += ' title="' + title + '"';
   }
-  out += this.options.xhtml ? '/>' : '>';
+  out += this.options.xhtml ? '/></div>' : '></div>';
   return out;
 };
 
