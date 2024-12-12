@@ -1,11 +1,19 @@
+# how? std::function in C++
+
+[TOC]
+
+[TAG:C++]
+
+![](std_function/1.jpg)
 本文旨在探讨C++11中引入的 std::function的实现原理.
 
 
 
-应用
+### 应用
+
         在正常使用时function 主要会用来存储可调用的对象，如函数指针、可调用类、类成员函数、lambda等. 如下是正常使用时可能会出现的场景.
  
-
+``` C++
 #include <functional>
 #include <iostream>
 
@@ -62,17 +70,19 @@ int main() {
 3
 4
 
-参考实现
+```
+
+### 参考实现
+
         先不管标准库如何实现，我们尝试实现类似std::function的功能;如下开始时的实现并没有考虑复杂参数的场景，为了简化问题,只考虑了int(int)这种函数原型，后面的优化方案中会对这一点进行优化.
 
 
-1.虚基父类多态方式,存储可调用对象
+#### 1.虚基父类多态方式,存储可调用对象
+
         从实际应用中我们可以看到function需要能够存储构造它的可调用对象的状态,而且可调用对象可能是多样的，各种可调用的类或者函数;一种比较容易理解的实现方案是这样的，每个function在实例化的时候，会构造对应的一个子类并实例化存在堆上，然后对于function本身来说，只存储一个父类的指针。这样的话，在function的调用过程中，就可以动态地执行相应可调用对象(即子类).
 
 
-
- 
-
+``` C++
 #include <functional>
 #include <iostream>
 
@@ -161,11 +171,14 @@ delete current base callable object
 delete current base callable object
 delete current base callable object
 
-2.存储可调用对象的内存指针以及调用、拷贝和析构函数的指针
+```
+
+#### 2.存储可调用对象的内存指针以及调用、拷贝和析构函数的指针
+
         在上一个多态方案中，在构造Function时，会根据当前的可调用对象类型来实例化子类，通过存储指向可调用对象的父类指针，直接对可调用对象进行比如调用、拷贝、释放等操作;类似地，我们也可以直接构造一个新的可调用对象，将其对应指针存储在Function中，但是，有个问题是，不使用多态这种形式的话，想存储多种可能变化的实例对象，只能使用void *指针来进行操作，见以下代码中 any_callable. 对于这个对象的使用，我们必须能够获取它的类型并进行我们需要的调用、拷贝以及释放等操作. 我们知道，在Function实例化的过程中，是可以得到可调用对象的类型信息的, 借助这一点，我们可以通过使用三类静态函数的模板来直接有针对性地实例化三个函数(call, copy,destruct)，并将该函数指针分别存储在Function中.由于这三个函数内部包含了any_callable所指向的可调用对象的类型信息，所以可以直接对这个void *指针指向对区域进行操作.
 
  
-
+``` C++
 #include <functional>
 #include <iostream>
 int getOne(int a) {    return 1;
@@ -257,19 +270,19 @@ int main() {
 delete current base callable object
 delete current base callable object
 delete current base callable object
+```
 
-3.优化当前方案
+#### 3.优化当前方案
+
 当前方案如前文所说只支持int(int)这一种函数签名,为了使我们的实现更具适应性、鲁棒性，我尝试做了如下改进.
 
-任意参数适配
-使用C++11特性,可变参数模板以及 perfect forwarding, 增强对参数类型的适配.
+##### 任意参数适配
 
+使用C++11特性,可变参数模板以及 perfect forwarding, 增强对参数类型的适配.
 比如对于方案1中虚函数方案,我们作出如下修改,将模板参数改为可变参数.
 
 
-
- 
-
+``` C++
 template < typename Ret, typename... Args >
 class Function< Ret(Args...) > {
     //构造虚基类以存储任意可调用对象的指针
@@ -319,25 +332,22 @@ public:
     }
 };
 
+```
+
         可以看到，相比于之前的版本，我在模板类参数里面加个对应的可变参数类型,但是只是加了这些后我和std::function的调用效果对比了一下，发现我这边在调用相同部分的代码时，我这边的实现会多调用一次右值拷贝构造函数.好好看了下代码后发现，在注释*line1*和*line2*的位置，我没有声明成Args&&,导致当我的Function函数参数声明成非引用类型时，这个callable_derived的operator函数的参数类型并不是引用类型.然而实际上,由于这一层的值其实是可以完全利用上一层得到的参数的.加上Args&&后，当Function的模板参数中有右值的话，这个地方就会是右值引用，上一层调用（Function的operator函数)已经过forward转成了右值引用，所以这一层就会减少一次构造. 和std::function至少在调用这块的性能上可以保持相似.
 
-完整代码可以参考如下,分别对应方案1和方案2的改进.
-
-: ) 查看原文可见代码.
+完整代码可以参考[这里](https://github.com/thiefuniverse/reading_coding/tree/master/lang/c%2B%2B/std/function),分别对应方案1和方案2的改进.
 
 
 
-内存优化
+##### 内存优化
 目前都是从堆上申请的内存,实际上对于一些很小的对象（比如小的class或者本身就是一个函数指针),我们直接将对象存储在一个指针大小的内存空间下,该方案此处暂未实现.
 
-一些标准库的实现
-gcc(8.2.0)
+### 一些标准库的实现
+#### gcc(8.2.0)
 看了我的电脑里gcc 8.2.0中的std_function.h实现，发现大体思路和上面我们的参考实现1基本一致，而且实现里面还考虑到内存较小时直接就使用指针大小(接近指针大小，可能是倍数)的内存来存储可调用对象.
 
-
-
- 
-
+``` C++
 // file: bits/std_function.h
 
   class _Undefined_class;
@@ -431,18 +441,16 @@ _M_destroy(_Any_data& __victim, false_type)
 {
   delete __victim._M_access<_Functor*>();
 }
+```
 
 主体部分如上，function底下使用 FunctionBase来统一处理 _Functor本身可能调用的多样性.
 
 
 
-llvm(9.0.0)
+#### llvm(9.0.0)
 看了llvm 9.0的这部分代码,目前底层实际上提供了两种实现:
 
-
-
- 
-
+``` C++
 // include/functional
 // 提供了__value_func和 __policy_func两种实现
 template<class _Rp, class ..._ArgTypes>
@@ -517,5 +525,7 @@ struct __use_small_storage
                     _LIBCPP_ALIGNOF(_Fun) <= _LIBCPP_ALIGNOF(__policy_storage) &&
                     _VSTD::is_trivially_copy_constructible<_Fun>::value &&
                     _VSTD::is_trivially_destructible<_Fun>::value> {};
+```
 
 另外，llvm实现中还单独特化了可调用对象无参数，1，2，3个参数的情形,具体代码在include/__function_03 中.
+完整代码在[这里](https://github.com/thiefuniverse/reading_coding/tree/master/lang/c%2B%2B/std/function)
