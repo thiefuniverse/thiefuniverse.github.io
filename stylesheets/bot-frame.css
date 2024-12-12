@@ -55,12 +55,12 @@ body {
 }
 
 .wrapper {
-    width: 1300px;
+    width: 1600px;
     margin: 0 auto;
 }
 
 header {
-    width: 230px;
+    width: 500px;
     float: left;
     position: fixed;
 }
@@ -86,7 +86,7 @@ footer {
     }
 
 section {
-    width: 900px;
+    width: 1000px;
     float: right;
 }
 
