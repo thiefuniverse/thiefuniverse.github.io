@@ -4,8 +4,14 @@
 #### 2024
 
 #### 2020
+- [智能指针那些琐事儿](2020/smart_ptr.md)
+- [记青海湖之旅–追赶会跑的羊肉串们](2020/ride_in_qinghai.md)
+- [谈谈我的二次元世界观](2020/anime_world.md)
+- [how? std::function in C++](2020/std_function_C++.md)
+
 
 #### 2019
+- [冲天香阵透长安--记4月古都一游](2019/journey_in_xian.md)
 
 #### 2018
 - [在自己心里养一只小怪兽](2018/2018-10-18-monster_in_heart.md)
