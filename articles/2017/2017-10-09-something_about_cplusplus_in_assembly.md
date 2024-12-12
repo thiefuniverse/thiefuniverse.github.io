@@ -1,17 +1,10 @@
 
-# Table of Contents
+# assembly in C++
 
-1.  [前言](#orgdfc45bf)
-2.  [C++ 的函数重载](#org45f116f)
-3.  [C++ 的引用](#orgdf6b0b6)
-4.  [C++ 内联函数](#org6cf7159)
-5.  [C++继承和多态](#orgd06ac85)
+[TOC]
 
-
-
-<a id="orgdfc45bf"></a>
-
-# 前言
+[TAG:assembly,C++]
+### 前言
 
   最近想补习一下操作系统，了解到有许多可以自己实现操作系统的好方法，比如说有JOS或者清华的ucore系统。其实也不是
 从头开始实现系统了，不过会参与实现操作系统的重要组成部分，了解到和操作系统底层相关的各种底层知识。其间我自己还补习
@@ -19,19 +12,18 @@
 里面实际上也提到了许多）
 
 
-<a id="org45f116f"></a>
-
-# C++ 的函数重载
+### C++ 的函数重载
 
   C语言是不支持函数重载的，而C++可以。关键就在于编译器在编译C++的函数的时候，会把它的参数信息也追加作为标识符。比如说
 编译器在处理这个函数时:
 
-    void f( int x, int y, double z) ;    // => 汇编的函数label可能为 _f_Fiid
-    void f(double x, double y, int z);   // => 汇编的函数label可能为 _f_Fddi
+    void f( int x, int y, double z) ;    // => 汇编的函数label "可能为" _f_Fiid
 
-之所以说汇编的label『可能』为是由于不同的编译器的实现可能是不一样的。易知对于C语言，汇编生成的label都是f,所以会产生编译错误。
+    void f(double x, double y, int z);   // => 汇编的函数label "可能为" _f_Fddi
+
+之所以说汇编的label"『可能』为"是由于不同的编译器的实现可能是不一样的。对于C语言，汇编生成的label都是f,所以会产生编译错误。
 这里给出一个例子:
-
+``` C++
     // test_overload_fun.cpp
     // for assembly code:   g++ -S test_overload_fun.cpp
     #include <iostream>
@@ -48,16 +40,15 @@
          std::cout<< f(4.6, 3.6,5)<< std::endl;
     
      }
+```
 
 使用g++编译得到的汇编代码里可以大致看到两个函数的label名:
 
 
-<a id="orgdf6b0b6"></a>
-
-# C++ 的引用
+### C++ 的引用
 
 从汇编代码可以明显看出来，引用实际本质上就是指针。
-
+``` C++
     #include <iostream>
     
     int byref(int & foo)
@@ -76,8 +67,10 @@
       std::cout<< byptr(&aFoo)<< std::endl;
     }
 
-Mac下汇编得到的两个函数代码分别是:
+```
 
+Mac下汇编得到的两个函数代码分别是:
+``` asm
     __Z5byptrPi:                            ## @_Z5byptrPi
          .cfi_startproc
     ## BB#0:
@@ -119,20 +112,17 @@ Mac下汇编得到的两个函数代码分别是:
     
          .globl	__Z5byptrPi
          .p2align	4, 0x90
+```
 
 两个函数的汇编代码可以说完全一样。
 
 
-<a id="org6cf7159"></a>
-
-# C++ 内联函数
+### C++ 内联函数
 
 我们知道C++的内联函数在编译阶段会直接被替换成具体的函数内语句，这一点从汇编代码上也可以明显看出来。
 
 
-<a id="orgd06ac85"></a>
-
-# C++继承和多态
+### C++继承和多态
 
    首先我们要知道，C++的类的成员函数在编译时会默认添加第一个参数，即this指针。这个参数对我们是隐式存在的，
 我们在调用某个对象的成员函数时，实际上把对象自身的地址作为this指针传入了成员函数中。（此处说明的只是C++的
@@ -144,6 +134,7 @@ Mac下汇编得到的两个函数代码分别是:
 
 送上一段代码，可以用来测试虚函数表的实际工作过程(测试在ubuntu 16.04下可编译通过并运行).
 
+``` C++
     #include <iostream>
     using namespace std;
     
@@ -200,9 +191,10 @@ Mac下汇编得到的两个函数代码分别是:
     
     
     }
+```
 
 输出为:
-
+``` C
     a:
     vtable address: 0x400f88
     dword 0:0x400dc8
@@ -221,9 +213,6 @@ Mac下汇编得到的两个函数代码分别是:
     dword 1:0x400df4
      B::m1()
      A: m2()
+```
 
-易知继承之后的B类中虚函数表重写了m1的指针。结构示意图如下:
-![img](https://thiefuniverse.github.io/resource/img/polymorphism.png)
-
-欢迎评论区交流~~~   :)
-
+易知继承之后的B类中虚函数表重写了m1的指针。

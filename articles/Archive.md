@@ -1,10 +1,20 @@
 
-> 🔔 最新文章先在 **公众号** 推送（微信搜 **偷心怪**）
+> 🔔 最新文章在 **公众号** 推送（微信搜 **偷心怪**）
 
 #### 2024
 
+#### 2020
 
-#### history
-- [三体阅读](history/three_body.md)
-- [mustache模板](history/mustache_template.md)
-- [怦然心动](history/flipped_reading.md)
+#### 2019
+
+#### 2018
+- [在自己心里养一只小怪兽](2018/2018-10-18-monster_in_heart.md)
+
+#### 2017 
+- [三体](2017/three_body.md)
+- [怦然心动](2017/flipped_reading.md)
+- [archlinux安装笔记](2017/archlinux_install_notice.md)
+- [android root](2017/android-root.md)
+- [lex generator](2017/lex_generator.md)
+- [assembly about C++](2017/2017-10-09-something_about_cplusplus_in_assembly.md)
+- [2001太空漫游](2017/2001-space-visitor.md)
