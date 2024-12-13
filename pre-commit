@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# 运行 Node.js 脚本
+node static/generate_tags.js
+
+# 检查 Node.js 脚本的退出状态
+if [ $? -ne 0 ]; then
+    echo "Node.js script failed. Commit aborted."
+    exit 1
+fi
+
+# 将生成的 JSON 文件添加到 Git 暂存区
+git add tags.json
+
+# 提示用户
+echo "tags.json has been added to the commit."
