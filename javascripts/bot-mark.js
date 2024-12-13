@@ -142,6 +142,28 @@ MarkdownRenderer.prototype.renderToc = function (mdHtml, headingArr) {
     return mdHtml.replace(/<p>\[TOC\]<\/p>/g, tocHtml);
 };
 
+MarkdownRenderer.prototype.renderTag = function (mdHtml, headingArr) {
+    const tagMatch = mdHtml.match(/\[TAG:(.*?)\]/);
+
+    const tags = tagMatch ? tagMatch[1].split(',').map(tag => tag.trim()) : [];
+
+    var tagHtml = "";
+    // 将信息添加到 tagsDict
+    tags.forEach(tag => {
+        tagHtml += "<a class='md_tag' href='../?post=tags#";
+        tagHtml += tag;
+        tagHtml += "'>#" + tag + "</a>  ";
+    });
+    tagHtml = "<p>" + tagHtml + "</p>";
+    return mdHtml.replace(/\[TAG:[^\]]*\]/g, tagHtml);
+}
+MarkdownRenderer.prototype.renderTime = function (mdHtml, headingArr) {
+    const timeMatch = mdHtml.match(/\[TIME:(.*?)\]/);
+    const timestamp = timeMatch ? timeMatch[1] : null;
+    var timeHtml = "<p>" + timestamp + "</p>";
+    return mdHtml.replace(/\[TIME:[^\]]*\]/g, timeHtml);
+}
+
 // math tags
 
 // Patch for math support
@@ -397,6 +419,8 @@ MarkdownRenderer.prototype.render = function (mdText) {
     // in/out: headingArr
     mdHtml = this.renderHeading(mdHtml, headingArr);
     mdHtml = this.renderToc(mdHtml, headingArr);
+    mdHtml = this.renderTag(mdHtml, headingArr);
+    mdHtml = this.renderTime(mdHtml, headingArr);
     mdHtml = this.renderCitation(mdHtml);
     mdHtml = this.renderReference(mdHtml, headingArr);
     mdHtml = this.renderSlides(mdHtml);

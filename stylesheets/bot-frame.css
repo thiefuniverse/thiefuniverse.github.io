@@ -108,6 +108,9 @@ section {
     }
 }
 
+.qrCodeSec {
+  max-width: 60%;
+}
 
 /* 940P and Print Layout */
 /* 940 = 860 (wrapper) + 30 (padding left) + 30 (padding right) + 20 (unknown) */

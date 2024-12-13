@@ -4,6 +4,8 @@
 
 [TAG:C++]
 
+[TIME:2018-3-17]
+
 ![](std_function/1.jpg)
 本文旨在探讨C++11中引入的 std::function的实现原理.
 

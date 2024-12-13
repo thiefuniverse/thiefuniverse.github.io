@@ -5,6 +5,8 @@
 
 [TAG:archlinux]
 
+[TIME:2017-5-2]
+
 ### lightdm的使用
 
   /etc/lightdm/lightdm.conf是主体配置文件,可以把greet－xsession设置成自己想要的

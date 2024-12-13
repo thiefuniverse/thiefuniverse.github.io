@@ -1,5 +1,6 @@
 ﻿<!doctype html>
 <html lang="zh">
+
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
@@ -37,7 +38,8 @@
     }
 
     /* Disable Share Section in print view and small screen */
-    @media print, screen and (max-width: 940px) {
+    @media print,
+    screen and (max-width: 940px) {
       .shareSec {
         display: none;
       }
@@ -51,7 +53,9 @@
     }
 
     @media print {
-      .cover-title, .cover-subtitle {
+
+      .cover-title,
+      .cover-subtitle {
         position: absolute;
         left: 50%;
         transform: translate(-50%, -50%);
@@ -77,6 +81,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="wrapper">
     <header>
@@ -93,6 +98,8 @@
   <script src="/javascripts/marked.js"></script>
   <script src="/javascripts/bot-mark.js"></script>
   <script src="/javascripts/bot-frame.js"></script>
+  <script src="/javascripts/qrcode.js"></script>
+  <script src="/javascripts/qrcode-svg.js"></script>
   <!-- Math Support -->
   <script src="/javascripts/katex.min.js"></script>
   <script src="/javascripts/auto-render.min.js"></script>
@@ -111,6 +118,16 @@
       if (end == -1) end = searchStr.length;
 
       return searchStr.substr(beg, end - beg);
+    }
+
+    function getFlagString() {
+      var searchStr = location.search;
+      let splitStr = searchStr.split("#");
+      if (splitStr.length > 1) {
+        return splitStr[1];
+      } else {
+        return "";
+      }
     }
 
     var mdSec = document.getElementsByClassName('markdown-body')[0];
@@ -219,9 +236,7 @@
         '<img src="/static/share.svg"> - ' +
         'Copy link</a></p>' +
         '<input type="text" id="copyTextContainer" style="display:none">' +
-        '<p class="qrCodeSec">' + '<img id="qrCode" src="../static/qrcode.jpg" alt="qrcode">' + '</p>';
-
-  
+        '<p class="qrCodeSec">' + qrCodeSVG(location.href, 360) + '</p>';
     }
 
     // Run Scripts inside 'mdSec
@@ -367,4 +382,5 @@
     });
   </script>
 </body>
+
 </html>
