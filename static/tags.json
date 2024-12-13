@@ -1,0 +1,46 @@
+{
+  "movie": [
+    "articles/2017/2001-space-visitor.md"
+  ],
+  "assembly": [
+    "articles/2017/2017-10-09-something_about_cplusplus_in_assembly.md"
+  ],
+  "C++": [
+    "articles/2017/2017-10-09-something_about_cplusplus_in_assembly.md",
+    "articles/2020/smart_ptr.md",
+    "articles/2020/std_function_C++.md"
+  ],
+  "android": [
+    "articles/2017/android-root.md"
+  ],
+  "root": [
+    "articles/2017/android-root.md"
+  ],
+  "archlinux": [
+    "articles/2017/archlinux_install_notice.md"
+  ],
+  "novel": [
+    "articles/2017/flipped_reading.md",
+    "articles/2017/three_body.md"
+  ],
+  "lex": [
+    "articles/2017/lex_generator.md"
+  ],
+  "thinking": [
+    "articles/2018/2018-10-18-monster_in_heart.md",
+    "articles/2020/anime_world.md"
+  ],
+  "life": [
+    "articles/2018/2018-happy_graduation.md",
+    "articles/2018/2018-summary.md",
+    "articles/2019/journey_in_xian.md",
+    "articles/2020/ride_in_qinghai.md"
+  ],
+  "journey": [
+    "articles/2019/journey_in_xian.md",
+    "articles/2020/ride_in_qinghai.md"
+  ],
+  "anime": [
+    "articles/2020/anime_world.md"
+  ]
+}

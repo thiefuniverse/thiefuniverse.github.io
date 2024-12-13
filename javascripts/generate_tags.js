@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const directoryPath = '../articles/'; // 替换为您的目录路径
+const directoryPath = './articles/'; // 替换为您的目录路径
 const tagPattern = /\[TAG:([^\]]+)\]/; // 正则表达式匹配 TAG:tes1,test2
 const outputFilePath = 'static/tags.json'; 
 

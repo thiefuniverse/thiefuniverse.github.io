@@ -117,6 +117,21 @@ if (typeof module !== 'undefined' && typeof exports === 'object') {
     module.exports = loadLayout;
 }
 
+
+(new FileLoader()).loadFile('/static/tags.json', promptState, function (tags) {
+    try {
+        tags = JSON.parse(tags);
+        // 遍历对象的键值对
+        for (var key in tags) {
+            console.log(key + ": " + tags[key]);
+        }
+
+    } catch (e) {
+        promptState('Bad JSON format in <em>' + filename + '</em> 😑');
+        document.title = 'Loading Failed';
+    }
+});
+
 // 设置主题
 function initTheme() {
 const userTheme = localStorage.getItem('theme');
@@ -140,4 +155,3 @@ function toggleTheme(isLight) {
 }
 
 initTheme(); // 检测当前时间并设置初始主题
-//document.getElementById('toggle-theme').addEventListener('click', toggleTheme);
