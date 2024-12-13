@@ -21,6 +21,7 @@ greeter.有不同的登录界面可以选择,比如lightdm-gtk-greeter,lightdm-w
 arch下安装软件还是比较方便的,但是一直切换不出来搜狗输入法让人很无奈,搜了半天最后发
 现似乎是在配置文件里加入
 
+``` C
     export LANG=zh_CN.UTF-8
     export LANGUAGE=zh_CN:en_US
     export LC_CTYPE=en_US.UTF-8
@@ -30,6 +31,7 @@ arch下安装软件还是比较方便的,但是一直切换不出来搜狗输入
     export XMODIFIERS="@im=fcitx"ｄ
     export GTK_IM_MODULE="fcitx"
     export QT_IM_MODULE="fcitx"
+```
 
 这些配置,然而,也不知道该加入哪个配置文件,/etc/locale.conf,~/.xinitrc,~/.xprofile,
 /etc/environment都加了最后不知怎么就可以调用了,只是同时也发现clion乱码了,很失望:(

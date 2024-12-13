@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 // 主 Markdown 文件路径
-const mainMdFile = 'articles/Archive.md';
+const mainMdFile = 'articles/archive.md';
 
 // 存储标签和对应信息的对象
 const tagsDict = {};
