@@ -76,7 +76,7 @@ function generateMarkdownFile() {
         if (err) {
             console.error(`Error writing ${outputMdFile}:`, err);
         } else {
-            console.log(`生成的标签总结已保存为 ${outputMdFile}`);
+            console.log(`tags ${outputMdFile}`);
         }
     });
 }
