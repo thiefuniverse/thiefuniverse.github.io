@@ -6,14 +6,14 @@
 [TIME:2024-12-15]
 
 ## 问题
-最近想把博客重新捡起来，参考了[Bot-man](https://bot-man-jl.github.io/)的博客, 进行了一点调整。放弃了使用最开始使用emacs里的[org mode](https://orgmode.org/)来写，转投markdown。配置好github page作为博客后，顺带把之前的emacs的配置再捡起来，使用emacs来写，把emacs里书写需要的一些功能配置成快捷键，可以极大得方便操作。
+最近想把博客重新捡起来，参考了[Bot-man](https://bot-man-jl.github.io/)的博客, 进行了一点调整。放弃了之前用的emacs里的[org mode](https://orgmode.org/)来写，转投markdown。配置好github page作为博客后，顺带把之前的emacs的配置再捡起来，使用emacs来写，把emacs里书写需要的一些功能配置成快捷键，可以极大地方便操作。
 
-在拉取我之前的emacs配置之后，尝试使用emacs社区里看到的一种有别于evil模式的模态编辑:[meow](https://github.com/meow-edit/meow),称为猫态编辑；可以使用它来替换掉evil mode（我主要使用evil默认的键位）以及[general](https://github.com/noctuid/general.el)（方便得定义一组快捷键).
+在拉取我之前的emacs配置之后，尝试使用emacs社区里看到的一种有别于evil模式的模态编辑:[meow](https://github.com/meow-edit/meow),称为猫态编辑；可以使用它来替换掉evil mode（我主要使用evil默认的键位）以及[general](https://github.com/noctuid/general.el)（方便地定义一组快捷键).
 
 还没怎么修改，发现在emacs里的光标移动非常卡顿，一直按着下键，emacs能直接卡住不动好一会...受不了了。
 
 ## 排查 
-拿wpr录制下trace，看看emacs的主线程发生了什么.我的电脑是12核24线程的cpu，下图中可以看到emacs的进程中主要运行的主要逻辑就是主线程跑的，切这个进程占用cpu达到4.1%(100/24~= 4.16),说明基本上emacs的UI主线程已经基本上打满了。这肯定会让我的操作变卡。
+拿wpr录制下trace，看看emacs的主线程发生了什么.我的电脑是12核24线程的cpu，下图中可以看到emacs的进程中主要运行的主要逻辑就是主线程跑的，且这个进程占用cpu达到4.1%(100/24~= 4.16),说明基本上emacs的UI主线程已经基本上打满了。这肯定会让我的操作变卡。
 ![主线程由于emacs自身逻辑打满](emacs_block1/1.png)
 
 找了一圈，没有找到emacs这个gnu软件的符号在哪里，比较尴尬；但是看堆栈里除了emacs.exe的逻辑，还有个**simple-fab5b0cf-7c10fc4e.eln**的逻辑（截图高亮区域），怀疑是什么第三方的插件代码引起的？这里eln结尾说明是elisp代码编译后的native字节码；一搜发现不是，是emacs自带的一些包括文件处理之类的基础逻辑库。
