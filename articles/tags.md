@@ -1,6 +1,6 @@
 # FlyThief's Blog Tag
 [TOC]
-## Emacs
+## emacs
 - [记一次Emacs输入卡顿分析](2024\emacs_block1.md)(2024-12-15)
 
 ## performance

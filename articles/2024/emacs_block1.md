@@ -1,28 +1,28 @@
-# 记一次Emacs输入卡顿分析
+# 记一次emacs输入卡顿分析
 
 [TOC]
 
-[TAG:Emacs,performance]
+[TAG:emacs,performance]
 [TIME:2024-12-15]
 
 ## 问题
-最近想把博客重新捡起来，参考了[Bot-man](https://bot-man-jl.github.io/)的博客, 进行了一点调整。放弃了使用最开始使用Emacs里的[org mode](https://orgmode.org/)来写，转投markdown。配置好github page作为博客后，顺带把之前的Emacs的配置再捡起来，使用Emacs来写，把Emacs里书写需要的一些功能配置成快捷键，可以极大得方便操作。
+最近想把博客重新捡起来，参考了[Bot-man](https://bot-man-jl.github.io/)的博客, 进行了一点调整。放弃了使用最开始使用emacs里的[org mode](https://orgmode.org/)来写，转投markdown。配置好github page作为博客后，顺带把之前的emacs的配置再捡起来，使用emacs来写，把emacs里书写需要的一些功能配置成快捷键，可以极大得方便操作。
 
-在拉取我之前的Emacs配置之后，尝试使用Emacs社区里看到的一种有别于evil模式的模态编辑:[meow](https://github.com/meow-edit/meow),称为猫态编辑；可以使用它来替换掉evil mode（我主要使用evil默认的键位）以及[general](https://github.com/noctuid/general.el)（方便得定义一组快捷键).
+在拉取我之前的emacs配置之后，尝试使用emacs社区里看到的一种有别于evil模式的模态编辑:[meow](https://github.com/meow-edit/meow),称为猫态编辑；可以使用它来替换掉evil mode（我主要使用evil默认的键位）以及[general](https://github.com/noctuid/general.el)（方便得定义一组快捷键).
 
-还没怎么修改，发现在Emacs里的光标移动非常卡顿，一直按着下键，Emacs能直接卡住不动好一会...受不了了。
+还没怎么修改，发现在emacs里的光标移动非常卡顿，一直按着下键，emacs能直接卡住不动好一会...受不了了。
 
 ## 排查 
-拿wpr录制下trace，看看Emacs的主线程发生了什么.我的电脑是12核24线程的cpu，下图中可以看到Emacs的进程中主要运行的主要逻辑就是主线程跑的，切这个进程占用cpu达到4.1%(100/24~= 4.16),说明基本上Emacs的UI主线程已经基本上打满了。这肯定会让我的操作变卡。
-![主线程由于Emacs自身逻辑打满](emacs_block1/1.png)
+拿wpr录制下trace，看看emacs的主线程发生了什么.我的电脑是12核24线程的cpu，下图中可以看到emacs的进程中主要运行的主要逻辑就是主线程跑的，切这个进程占用cpu达到4.1%(100/24~= 4.16),说明基本上emacs的UI主线程已经基本上打满了。这肯定会让我的操作变卡。
+![主线程由于emacs自身逻辑打满](emacs_block1/1.png)
 
-找了一圈，没有找到Emacs这个gnu软件的符号在哪里，比较尴尬；但是看堆栈里除了Emacs.exe的逻辑，还有个simple-fab5b0cf-7c10fc4e.eln的逻辑（截图高亮区域），怀疑是什么第三方的插件代码引起的？这里eln结尾说明是elisp代码编译后的native字节码；一搜发现不是，是Emacs自带的一些包括文件处理之类的基础逻辑库。
+找了一圈，没有找到emacs这个gnu软件的符号在哪里，比较尴尬；但是看堆栈里除了emacs.exe的逻辑，还有个simple-fab5b0cf-7c10fc4e.eln的逻辑（截图高亮区域），怀疑是什么第三方的插件代码引起的？这里eln结尾说明是elisp代码编译后的native字节码；一搜发现不是，是emacs自带的一些包括文件处理之类的基础逻辑库。
 
 ![本地路径](emacs_block1/2.png)
 
 ![说明](emacs_block1/3.png)
 
-这么看应该是Emacs自身elisp执行的逻辑里存在问题，想到Emacs自身也有profiling机制，我们执行**profile-start** ,性能选项选择cpu，然后上下移动光标触发卡顿现象，然后再 **profile-stop** , **profile-report** 。可以看到输出的cpu堆栈情况如下,
+这么看应该是emacs自身elisp执行的逻辑里存在问题，想到emacs自身也有profiling机制，我们执行**profile-start** ,性能选项选择cpu，然后上下移动光标触发卡顿现象，然后再 **profile-stop** , **profile-report** 。可以看到输出的cpu堆栈情况如下,
 
 ![主要逻辑和lsp-bridge相关](emacs_block1/4.png)
 
@@ -42,4 +42,4 @@
 
 ![服务进程由于python依赖错误频繁异常退出](emacs_block1/7.png)
 
-至此，我们搞清楚了原因，先把lsp bridge 相关的配置去掉,之后重启Emacs发现果然恢复了流畅操作。
+至此，我们搞清楚了原因，先把lsp bridge 相关的配置去掉,之后重启emacs发现果然恢复了流畅操作。
