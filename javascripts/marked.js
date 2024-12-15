@@ -965,7 +965,7 @@ Renderer.prototype.link = function(href, title, text) {
 
 Renderer.prototype.image = function(href, title, text) {
   var out = '<div class="md_img">';
-  out += '<img src="' + href + '" alt="' + text + '"';
+  out += '<img class="md_only_img" src="' + href + '" alt="' + text + '"';
   if (title) {
     out += ' title="' + title + '"';
   }

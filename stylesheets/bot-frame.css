@@ -94,6 +94,12 @@ section {
     text-align: center;
 }
 
+.md_only_img:hover {
+    margin: 0 auto;
+    text-align: center;
+    transform: scale(1.6);
+}
+
 .md_img_txt {
     color: rgba(0, 0, 0, 0.5);
     text-align: center;
