@@ -38,8 +38,10 @@
 
 ![配置异常](emacs_block1/6.png)
 
-发现这个调用被加到了[post-command-hook](https://www.gnu.org/software/emacs/manual/html_node/elisp/Command-Overview.html#index-post_002dcommand_002dhook) 中,本意看提交记录是想确保这里的逻辑能被调用成功(server启动成功之后会移除该hook),但是这里的策略非常激进，因为这个hook的场景是每次执行command都会跑一次这里注册的逻辑。此时我们再看 **Lsp Bridge** buffer里是否有什么错误信息,发现其服务进程存在频繁异常退出的情况。
+发现这个调用被加到了[post-command-hook](https://www.gnu.org/software/emacs/manual/html_node/elisp/Command-Overview.html#index-post_002dcommand_002dhook) 中,本意看提交记录是想确保这里的逻辑能被调用成功(server启动成功之后会移除该hook),但是这里的策略非常激进，因为这个hook的场景是每次执行command都会跑一次这里注册的逻辑；如果这里`lsp-bridge-start-process`的逻辑一直不成功，就可能频繁触发。此时我们再看 **Lsp Bridge** buffer里是否有什么错误信息,发现其服务进程存在频繁异常退出的情况。
 
 ![服务进程由于python依赖错误频繁异常退出](emacs_block1/7.png)
 
-至此，我们搞清楚了原因，先把lsp bridge 相关的配置去掉,之后重启emacs发现果然恢复了流畅操作。
+至此，搞清楚了原因:是`lsp-bridge-start-process`注册为post-command-hook 之后，由于python依赖异常，每次这个lsp-bridge的逻辑都无法执行成功，进程异常退出，然后由于hook继续频繁触发该调用逻辑引起了卡顿。
+
+针对这个情况,先把lsp bridge 相关的配置去掉,之后重启emacs发现果然恢复了流畅操作。
