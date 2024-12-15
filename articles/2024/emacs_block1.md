@@ -16,7 +16,7 @@
 拿wpr录制下trace，看看emacs的主线程发生了什么.我的电脑是12核24线程的cpu，下图中可以看到emacs的进程中主要运行的主要逻辑就是主线程跑的，切这个进程占用cpu达到4.1%(100/24~= 4.16),说明基本上emacs的UI主线程已经基本上打满了。这肯定会让我的操作变卡。
 ![主线程由于emacs自身逻辑打满](emacs_block1/1.png)
 
-找了一圈，没有找到emacs这个gnu软件的符号在哪里，比较尴尬；但是看堆栈里除了emacs.exe的逻辑，还有个simple-fab5b0cf-7c10fc4e.eln的逻辑（截图高亮区域），怀疑是什么第三方的插件代码引起的？这里eln结尾说明是elisp代码编译后的native字节码；一搜发现不是，是emacs自带的一些包括文件处理之类的基础逻辑库。
+找了一圈，没有找到emacs这个gnu软件的符号在哪里，比较尴尬；但是看堆栈里除了emacs.exe的逻辑，还有个**simple-fab5b0cf-7c10fc4e.eln**的逻辑（截图高亮区域），怀疑是什么第三方的插件代码引起的？这里eln结尾说明是elisp代码编译后的native字节码；一搜发现不是，是emacs自带的一些包括文件处理之类的基础逻辑库。
 
 ![本地路径](emacs_block1/2.png)
 
@@ -26,15 +26,15 @@
 
 ![主要逻辑和lsp-bridge相关](emacs_block1/4.png)
 
-主要逻辑是卡在lsp-bridge这个插件的函数中，profile期间88%的cpu占用是在跑lsp-bridge-start-process 这个函数；这个lsp-bridge 本身是用来做代码补全的插件，会启独立的server进程来做一些代码补全相关的支持；
+主要逻辑是卡在lsp-bridge这个插件的函数中，profile期间88%的cpu占用是在跑`lsp-bridge-start-process` 这个函数；这个lsp-bridge 本身是用来做代码补全的插件，会启独立的server进程来做一些代码补全相关的支持；
 
 ![lsp-bridge-start-process](emacs_block1/8.png)
 
-比较奇怪，我们只是按了j键移动光标,为什么会走到这个逻辑呢, 而且它的上层调用还是query-replace 这种普通的查找替换逻辑；使用debug-on-entry 在这个函数下断点调试，观察下情况，下完断点之后发现马上就断住了。d 单步执行，又会进入下一个lsp-bridge-start-process，如此每次都是，而且现在它的上层调用是 recursive-edit，还不一样，它的调用时机非常可疑。
+比较奇怪，我们只是按了j键移动光标,为什么会走到这个逻辑呢, 而且它的上层调用还是`query-replace`这种普通的查找替换逻辑；使用`debug-on-entry`在这个函数下断点调试，观察下情况，下完断点之后发现马上就断住了。d 单步执行，又会进入下一个`lsp-bridge-start-process`，如此每次都是，而且现在它的上层调用是 recursive-edit，还不一样，它的调用时机非常可疑。
 
 ![递归调用](emacs_block1/5.png)
 
-这么看lsp-bridge-start-process这个调用可能存在配置上逻辑的异常，在配置路径下搜索这个start-process相关的配置。
+这么看`lsp-bridge-start-process`这个调用可能存在配置上逻辑的异常，在配置路径下搜索这个`start-process`相关的配置。
 
 ![配置异常](emacs_block1/6.png)
 
