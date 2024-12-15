@@ -1,10 +1,10 @@
 # FlyThief's Blog Tag
 [TOC]
 ## emacs
-- [记一次Emacs输入卡顿分析](2024\emacs_block1.md)(2024-12-15)
+- [记一次emacs输入卡顿分析](2024\emacs_block1.md)(2024-12-15)
 
 ## performance
-- [记一次Emacs输入卡顿分析](2024\emacs_block1.md)(2024-12-15)
+- [记一次emacs输入卡顿分析](2024\emacs_block1.md)(2024-12-15)
 
 ## journey
 - [记青海湖之旅–追赶会跑的羊肉串们](2020\ride_in_qinghai.md)(2020-10-16)
