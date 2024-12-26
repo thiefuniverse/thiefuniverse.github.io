@@ -6,16 +6,16 @@
 [TAG:assembly]
 
 ## 介绍
-本文介绍csapp实验题中[attack bomb](https://csapp.cs.cmu.edu/3e/labs.html)的分析过程;该实验要求利用程序的缓冲区溢出漏洞,通过给予特定输入内容,来改变程序正常的运行逻辑，实现对程序的攻击操作;通过这个攻击过程增强学习者稳定性编码的意识、熟悉栈区数据的机制。其中给了两个待攻击的目标程序, ctarget和rtarget,和对应的5个具体攻击要求.
+本文记录csapp实验题中[attack bomb](https://csapp.cs.cmu.edu/3e/labs.html)的分析过程;该实验要求利用程序的缓冲区溢出漏洞,通过给予特定输入内容,改变程序正常的运行逻辑，实现对程序的攻击操作;通过这个攻击过程可以加强对栈区数据机制的理解, 并对缓冲区溢出攻击有更直观的认识,日常写代码时也会从此格外注意。实验给了两个待攻击的目标程序, ctarget和rtarget,和对应共计5个攻击要求.感兴趣的话可以一起参考上面的链接下载实验程序进行一番探索（实验环境要求Linux系统，使用gdb进行调试)
 
 ## part I: ctarget
 ### phase 1
-第一题介绍了ctarget会类似如下的test函数，接收一个buf输入，需要让getbuf调用返回之后，不进行后续操作，直接调用touch1函数。
+第一题首先介绍了ctarget程序的特点，它内部存在一个test函数，其调用getbuf函数来接收一个buf输入，我们需要让getbuf调用返回之后，不进行后续操作，直接调用程序内部的touch1函数。
 ![intro](attack_lab/2.png)
-gdb跑起来目标程序(ctarget),反汇编看下test和getbuf的实现。
+gdb运行目标程序(ctarget),反汇编看下test和getbuf的实现。
 ![disassembly for test/getbuf](attack_lab/1.png)
 从getbuf开始的反汇编中，看到rsp寄存器减去了0x28（40个字节），一般来说，应该是从栈上分配了40个字节的内存给局部变量，对应代码中的BUFFERSIZE，之后将rsp赋值给rdi，作为Gets的参数来接收数据。
-之后我还看了下Gets的反汇编，但是想了想，Gets本身的作用是读取数据存储到buf，要想实现getbuf返回之后不继续执行原有逻辑，则需要在Gets读取的时候，让溢出数据覆盖栈上get\_buf的返回地址，通过改变返回地址，改变ip寄存器的行为。
+之后我还看了下Gets的反汇编，但是想了想，Gets本身的作用是读取数据存储到buf，要想实现getbuf返回之后不继续执行原有逻辑，则需要在Gets读取的时候，让溢出数据覆盖栈上get\_buf的返回地址，通过改变返回地址，改变ip寄存器的行为。和Gets本身的逻辑应该关系不大.
 观察调用getbuf时的栈数据，发现进入函数入口时rsp指针为 0x5561dca0，
 ![](attack_lab/5.png)
 此时它对应栈上的数据是0x00401976,正是getbuf返回后的下一行地址。此处如果能让getbuf里缓存溢出修改当前这里的数据，就可以使得getbuf返回后跳转到touch1. 测试输入12345,发现0x5561dca0-0x28的位置，确实被修改成了12345（对应下图中的0x31 0x32 0x33 0x34 0x35）；现在问题转化为，要把touch1的函数地址，作为给getbuf的输入中的第41-44个byte的数据;
