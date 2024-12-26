@@ -19,7 +19,7 @@ gdb运行目标程序(ctarget),反汇编看下test和getbuf的实现。
 观察调用getbuf时的栈数据，发现进入函数入口时rsp指针为 0x5561dca0，
 ![](attack_lab/5.png)
 此时它对应栈上的数据是0x00401976,正是getbuf返回后的下一行地址。此处如果能让getbuf里缓存溢出修改当前这里的数据，就可以使得getbuf返回后跳转到touch1. 测试输入12345,发现0x5561dca0-0x28的位置，确实被修改成了12345（对应下图中的0x31 0x32 0x33 0x34 0x35）；现在问题转化为，要把touch1的函数地址，作为给getbuf的输入中的第41-44个byte的数据;
-![observe stack data](attack_lab/1.png)
+![observe stack data](attack_lab/6.png)
 disas touch1获取到函数开始地址后(具体小端序表示为c0 17 40 00)，使用hex2raw 进行验证，发现确实通过了level1测试,验证成功。
 ![test](attack_lab/7.png)
 
