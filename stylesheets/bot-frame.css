@@ -98,6 +98,7 @@ section {
     margin: 0 auto;
     text-align: center;
     transform: scale(1.6);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
 .md_img_txt {
