@@ -1,5 +1,8 @@
 # FlyThief's Blog Tag
 [TOC]
+## crash
+- [LdrpHandleInvalidUserCallTarget 崩溃](2025\invalid_call_target_crash.md)(2025-02-20)
+
 ## assembly
 - [csapp 缓冲区溢出攻击(stackoverflow)](2024\attack_lab.md)(2024-12-19)
 - [assembly about C++](2017\2017-10-09-something_about_cplusplus_in_assembly.md)(2017-8-3)

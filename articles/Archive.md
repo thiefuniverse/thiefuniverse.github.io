@@ -1,6 +1,9 @@
 
 > 🔔 文章在 **公众号** 推送（微信搜 **偷心怪**）
 
+#### 2025
+- [LdrpHandleInvalidUserCallTarget 崩溃](2025/invalid_call_target_crash.md)
+
 #### 2024
 - [csapp 缓冲区溢出攻击(stackoverflow)](2024/attack_lab.md)
 - [记一次emacs输入卡顿分析](2024/emacs_block1.md)

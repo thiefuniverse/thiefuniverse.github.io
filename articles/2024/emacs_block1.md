@@ -2,8 +2,8 @@
 
 [TOC]
 
-[TAG:emacs,performance]
 [TIME:2024-12-15]
+[TAG:emacs,performance]
 
 ## 问题
 最近想把博客重新捡起来，参考了[Bot-man](https://bot-man-jl.github.io/)的博客, 进行了一点调整。放弃了之前用的emacs里的[org mode](https://orgmode.org/)来写，转投markdown。配置好github page作为博客后，顺带把之前的emacs的配置再捡起来，使用emacs来写，把emacs里书写需要的一些功能配置成快捷键，可以极大地方便操作。
