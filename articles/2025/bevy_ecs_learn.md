@@ -19,6 +19,13 @@
 * 组件(Component): 存在多类组件，构成实体。
 * 系统(System): 作用于实体或者组件上的规则逻辑，
 
+有个这样对比OOP和ECS的例子：
+
+OOP："我"是一个戴眼镜的人，所以我有一副眼镜(Property)，我会擦眼镜("我"的Function之一）。我.眼镜=true。我.擦眼镜()。
+
+ECS："我"有一副眼镜(Component)。所以我可以是一个戴眼镜的人(检查是否是戴眼镜的人的System)，我也会擦眼镜(擦眼镜System)。这两个System都关心所有有眼镜的entity。
+
+
 ![ECS Simple Layout](bevy_learn_ecs/ECS_Simple_Layout.png)
 
 
@@ -105,10 +112,4 @@ Windows系统Trace的数据处理中，不同的聚类方式，即可从不同�
 
 ![Windows Trace 中Cpu精确模式的不同视图，一组数据从不同角度去查看](bevy_learn_ecs/windows_trace_view.png)
 
-发现网上有个这样的对比OOP和ECS的例子：oop的思路是“我是什么”；ecs的思路是“我有什么”。
-
-OOP："我"是一个戴眼镜的人，所以我有一副眼镜(Property)，我会擦眼镜("我"的Function之一）。我.眼镜=true。我.擦眼镜()。
-
-ECS："我"有一副眼镜(Component)。所以我可以是一个戴眼镜的人(检查是否是戴眼镜的人的System)，我也会擦眼镜(擦眼镜System)。这两个System都关心所有有眼镜的entity。
-
-主要区别就在于“继承”和“组合”，两者的实现思路截然不同。OOP是针对对象，ECS的System逻辑是针对一类实体，而且需要做更高层次的抽象，抽象出一类实体的通用逻辑规则。
+oop的思路是“我是什么”；ecs的思路是“我有什么”。主要区别就在于“继承”和“组合”，两者的实现思路截然不同。OOP是针对对象，ECS的System逻辑是针对一类实体，而且需要做更高层次的抽象，抽象出一类实体的通用逻辑规则。
