@@ -86,8 +86,7 @@ hello Name3!
 hello Name2!
 hello people with flag: Name2!
 ```
-
-对于一个简单的打印操作，区别于OOP逐个遍历操作对象，ECS直接通过System访问数据，进行操作。
+对于一个简单的打印操作，区别于OOP逐个遍历操作对象，ECS通过把需要打印的实体过滤出来，通过System进行打印。
 
 
 ## 优点 
